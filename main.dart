@@ -38,7 +38,6 @@ void calculationsForReleasingCurrentInvestment({
   print("Calculations for releasing current investment");
 
   double nextCapital = 0;
-  int i = 1;
   double releasedAmount = 0;
 
   while (releasedAmount < investment) {
