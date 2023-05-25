@@ -10,8 +10,8 @@ String datePattern =
 
 void main() {
   //All in USDT Currency
-  double investment = 25 + 11 + 18;
-  double currentCapital = 52.52;
+  double investment = (25 + 11 + 18) - 24.24;
+  double currentCapital = 27.72;
   int currentSlabValue = Slabs.beginner.personalFundInUsd;
 
   double minimumAmountReleasable = 25;
@@ -683,20 +683,29 @@ void calculationsForReleasingCurrentInvestmentImmediately({
   double releasedAmount = 0;
 
   while (releasedAmount < investment) {
-    if (currentCapital >= (currentSlabValue + minimumAmountReleasable)) {
+    if (currentCapital >=
+        (currentSlabValue +
+            minimumAmountReleasable +
+            (minimumAmountReleasable * 0.0265))) {
       double amountToRelease = currentCapital - currentSlabValue;
-      if ((releasedAmount + (amountToRelease - networkFeeForTransaction)) >
+      if ((releasedAmount +
+              (amountToRelease -
+                  networkFeeForTransaction -
+                  (minimumAmountReleasable * 0.0265))) >
           investment) {
-        amountToRelease =
-            (investment - releasedAmount) + networkFeeForTransaction;
+        amountToRelease = (investment - releasedAmount) +
+            networkFeeForTransaction +
+            (minimumAmountReleasable * 0.0265);
       }
       print("-----------------------------------------------");
       print(
           "From Capital ${currentCapital.toStringAsFixed(2)} USD, $amountToRelease USD will released to wallet");
       currentCapital = currentCapital - amountToRelease;
       print("New Capital is ${currentCapital.toStringAsFixed(2)} USD");
-      releasedAmount =
-          releasedAmount + (amountToRelease - networkFeeForTransaction);
+      releasedAmount = releasedAmount +
+          (amountToRelease -
+              networkFeeForTransaction -
+              (amountToRelease * 0.0265));
       print("Released Amount Till the Date is $releasedAmount USD");
       if (releasedAmount < investment) {
         print(
