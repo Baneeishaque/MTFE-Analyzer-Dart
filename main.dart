@@ -49,6 +49,7 @@ void main() {
         "11. Get next Second Slab Via. Manual Investment, then Releasing Current Investment After Accumulation of Next Slab");
     print(
         "12. Get next Second Slab Via. Manual Investment, then Releasing Current Investment After Accumulation of Next Second Slab");
+    print("13. For Releasing Current Investment After Accumulation, Then Stop");
 
     print("0. Exit");
 
@@ -68,18 +69,19 @@ void main() {
           networkFeeForTransaction: networkFeeForTransaction,
           currentDayProfitPercentage: currentDayProfitPercentage,
           currentDate: currentDate,
+          currentSlabValueForForecast: currentSlabValue,
         );
         break;
       case '2':
         calculationsForReleasingCurrentInvestmentAfterAccumulation(
-          investment: investment,
-          currentCapital: currentCapital,
-          currentSlabValue: currentSlabValue,
-          minimumAmountReleasable: minimumAmountReleasable,
-          networkFeeForTransaction: networkFeeForTransaction,
-          currentDayProfitPercentage: currentDayProfitPercentage,
-          currentDate: currentDate,
-        );
+            investment: investment,
+            currentCapital: currentCapital,
+            currentSlabValue: currentSlabValue,
+            minimumAmountReleasable: minimumAmountReleasable,
+            networkFeeForTransaction: networkFeeForTransaction,
+            currentDayProfitPercentage: currentDayProfitPercentage,
+            currentDate: currentDate,
+            currentSlabValueForForecast: currentSlabValue);
         break;
       case '3':
         calculationsForReleasingCurrentInvestmentAfterNextSlab(
@@ -112,18 +114,19 @@ void main() {
           networkFeeForTransaction: networkFeeForTransaction,
           currentDayProfitPercentage: currentDayProfitPercentage,
           currentDate: currentDate,
+          currentSlabValueForForecast: currentSlabValue,
         );
         break;
       case '6':
         calculationsForReleasingCurrentInvestmentAfterAccumulationAfterManualNextSlab(
-          investment: investment,
-          currentCapital: currentCapital,
-          currentSlabValue: currentSlabValue,
-          minimumAmountReleasable: minimumAmountReleasable,
-          networkFeeForTransaction: networkFeeForTransaction,
-          currentDayProfitPercentage: currentDayProfitPercentage,
-          currentDate: currentDate,
-        );
+            investment: investment,
+            currentCapital: currentCapital,
+            currentSlabValue: currentSlabValue,
+            minimumAmountReleasable: minimumAmountReleasable,
+            networkFeeForTransaction: networkFeeForTransaction,
+            currentDayProfitPercentage: currentDayProfitPercentage,
+            currentDate: currentDate,
+            currentSlabValueForForecast: currentSlabValue);
         break;
       case '7':
         calculationsForReleasingCurrentInvestmentAfterNextSlabAfterManualNextSlab(
@@ -191,12 +194,32 @@ void main() {
           currentDate: currentDate,
         );
         break;
+      case '13':
+        calculationsForReleasingCurrentInvestmentAfterAccumulation(
+            investment: investment,
+            currentCapital: currentCapital,
+            currentSlabValue: currentSlabValue,
+            minimumAmountReleasable: minimumAmountReleasable,
+            networkFeeForTransaction: networkFeeForTransaction,
+            currentDayProfitPercentage: currentDayProfitPercentage,
+            currentDate: currentDate,
+            currentSlabValueForForecast: 0);
+        break;
       default:
         print('Invalid choice. Please try again...');
         break;
     }
   }
 }
+
+void calculationsForReleasingCurrentInvestmentImmediatelyThenStop(
+    {required double investment,
+    required double currentCapital,
+    required int currentSlabValue,
+    required double minimumAmountReleasable,
+    required double networkFeeForTransaction,
+    required double currentDayProfitPercentage,
+    required DateTime currentDate}) {}
 
 void
     calculationsForReleasingCurrentInvestmentAfterNextSecondSlabAfterManualNextSecondSlab({
@@ -281,6 +304,7 @@ void
       networkFeeForTransaction: networkFeeForTransaction,
       currentDayProfitPercentage: currentDayProfitPercentage,
       currentDate: currentDate,
+      currentSlabValueForForecast: currentSlabValue,
     );
   }
 }
@@ -311,6 +335,7 @@ void
       networkFeeForTransaction: networkFeeForTransaction,
       currentDayProfitPercentage: currentDayProfitPercentage,
       currentDate: currentDate,
+      currentSlabValueForForecast: currentSlabValue,
     );
   }
 }
@@ -381,6 +406,7 @@ void
   required double networkFeeForTransaction,
   required double currentDayProfitPercentage,
   required DateTime currentDate,
+  required int currentSlabValueForForecast,
 }) {
   Pair<double, int> investsForNextSlab = investUpToNextSlab(
     investment: investment,
@@ -391,12 +417,13 @@ void
   if (investsForNextSlab.second != 0) {
     calculationsForReleasingCurrentInvestmentAfterAccumulation(
       investment: investsForNextSlab.first,
-      currentCapital: currentCapital,
+      currentCapital: investsForNextSlab.first,
       currentSlabValue: investsForNextSlab.second,
       minimumAmountReleasable: minimumAmountReleasable,
       networkFeeForTransaction: networkFeeForTransaction,
       currentDayProfitPercentage: currentDayProfitPercentage,
       currentDate: currentDate,
+      currentSlabValueForForecast: currentSlabValueForForecast,
     );
   }
 }
@@ -409,6 +436,7 @@ void calculationsForReleasingCurrentInvestmentImmediatelyAfterManualNextSlab({
   required double networkFeeForTransaction,
   required double currentDayProfitPercentage,
   required DateTime currentDate,
+  required int currentSlabValueForForecast,
 }) {
   Pair<double, int> investsForNextSlab = investUpToNextSlab(
     investment: investment,
@@ -420,12 +448,13 @@ void calculationsForReleasingCurrentInvestmentImmediatelyAfterManualNextSlab({
   if (investsForNextSlab.second != 0) {
     calculationsForReleasingCurrentInvestmentImmediately(
       investment: investsForNextSlab.first,
-      currentCapital: currentCapital,
+      currentCapital: investsForNextSlab.first,
       currentSlabValue: investsForNextSlab.second,
       minimumAmountReleasable: minimumAmountReleasable,
       networkFeeForTransaction: networkFeeForTransaction,
       currentDayProfitPercentage: currentDayProfitPercentage,
       currentDate: currentDate,
+      currentSlabValueForForecast: currentSlabValueForForecast,
     );
   }
 }
@@ -533,6 +562,7 @@ void calculationsForReleasingCurrentInvestmentAfterNextSecondSlab({
       currentDate: currentDate,
       currentDayProfitPercentage: currentDayProfitPercentage,
       concernedValue: (nextSecondSlabValue - currentSlabValue).toDouble(),
+      currentSlabValueForForecast: currentSlabValue,
     );
   }
 }
@@ -545,6 +575,7 @@ void calculationsForReleasingCurrentInvestmentAfterAccumulation({
   required double networkFeeForTransaction,
   required double currentDayProfitPercentage,
   required DateTime currentDate,
+  required int currentSlabValueForForecast,
 }) {
   printHeader(investment, currentCapital, currentSlabValue);
 
@@ -559,6 +590,7 @@ void calculationsForReleasingCurrentInvestmentAfterAccumulation({
     currentDate: currentDate,
     currentDayProfitPercentage: currentDayProfitPercentage,
     concernedValue: 0,
+    currentSlabValueForForecast: currentSlabValueForForecast,
   );
 }
 
@@ -570,13 +602,14 @@ void calculationsUpToAValueThenRelease({
   required DateTime currentDate,
   required double currentDayProfitPercentage,
   required double concernedValue,
+  required int currentSlabValueForForecast,
 }) {
   double nextCapital = 0;
   double releasedAmount = 0;
 
   while (currentCapital <
       (investment +
-          currentSlabValue +
+          currentSlabValueForForecast +
           networkFeeForTransaction +
           concernedValue)) {
     var formattedCurrentDate = DateFormat(datePattern).format(currentDate);
@@ -601,7 +634,7 @@ void calculationsUpToAValueThenRelease({
   }
   print("-----------------------------------------------");
 
-  double amountToRelease = currentCapital - currentSlabValue;
+  double amountToRelease = currentCapital - currentSlabValueForForecast;
   if ((releasedAmount + (amountToRelease - networkFeeForTransaction)) >
       investment) {
     amountToRelease = (investment - releasedAmount) + networkFeeForTransaction;
@@ -644,6 +677,7 @@ void calculationsForReleasingCurrentInvestmentAfterNextSlab({
       currentDate: currentDate,
       currentDayProfitPercentage: currentDayProfitPercentage,
       concernedValue: (nextSlabValue - currentSlabValue).toDouble(),
+      currentSlabValueForForecast: currentSlabValue,
     );
   }
 }
@@ -674,6 +708,7 @@ void calculationsForReleasingCurrentInvestmentImmediately({
   required double networkFeeForTransaction,
   required double currentDayProfitPercentage,
   required DateTime currentDate,
+  required int currentSlabValueForForecast,
 }) {
   printHeader(investment, currentCapital, currentSlabValue);
 
@@ -684,10 +719,10 @@ void calculationsForReleasingCurrentInvestmentImmediately({
 
   while (releasedAmount < investment) {
     if (currentCapital >=
-        (currentSlabValue +
+        (currentSlabValueForForecast +
             minimumAmountReleasable +
             (minimumAmountReleasable * 0.0265))) {
-      double amountToRelease = currentCapital - currentSlabValue;
+      double amountToRelease = currentCapital - currentSlabValueForForecast;
       if ((releasedAmount +
               (amountToRelease -
                   networkFeeForTransaction -
